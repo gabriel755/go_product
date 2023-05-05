@@ -3,8 +3,7 @@ package main
 import (
 	"net/http"
 
-	_ "github.com/gabriel755/models"
-	_ "github.com/gabriel755/routes"
+	"github.com/golang/routes"
 )
 
 func main() {

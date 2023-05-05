@@ -1,18 +1,19 @@
 package models
 
+import "github.com/golang/db"
+
 type Produto struct {
-	id         int
+	Id         int
 	Nome       string
 	Descricao  string
 	Preco      float64
 	Quantidade int
 }
 
-func BuscaProdutos() []Produto {
-	db := ConncetionDb()
+func BuscaTodosOsProdutos() []Produto {
+	db := db.ConectaComBancoDeDados()
 
-	selectDeTodosOsProdutos, err := db.Query("select * from produtos;")
-
+	selectDeTodosOsProdutos, err := db.Query("select * from produtos")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -26,28 +27,29 @@ func BuscaProdutos() []Produto {
 		var preco float64
 
 		err = selectDeTodosOsProdutos.Scan(&id, &nome, &descricao, &preco, &quantidade)
-
 		if err != nil {
 			panic(err.Error())
 		}
+
 		p.Nome = nome
 		p.Descricao = descricao
 		p.Preco = preco
 		p.Quantidade = quantidade
+
 		produtos = append(produtos, p)
 	}
 	defer db.Close()
 	return produtos
-
 }
+func CriaNovoProduto(nome, descricao string, preco float64, quantidade int) {
+	db := db.ConectaComBancoDeDados()
 
-func CreateNewProduct(nome, descricao string, preco float64, quantidade int) {
-	db := db.ConncetionDb()
-
-	insertDataInDb, err := db.Prepare("insert into produtos(nome, dedscricao, preco, quantidade) values($1, $2, $3, $4)")
+	insereDadosNoBanco, err := db.Prepare("insert into produtos(nome, descricao, preco, quantidade) values($1, $2, $3, $4)")
 	if err != nil {
 		panic(err.Error())
 	}
-	insertDataInDb.Exec(nome, descricao, preco, quantidade)
+
+	insereDadosNoBanco.Exec(nome, descricao, preco, quantidade)
 	defer db.Close()
+
 }

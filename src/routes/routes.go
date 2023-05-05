@@ -3,11 +3,11 @@ package routes
 import (
 	"net/http"
 
-	_ "github.com/gabriel755/controllers"
+	"github.com/golang/controllers"
 )
 
 func CarregaRotas() {
-	http.HandleFunc("/", index)
-	http.HandleFunc("/new", controllers.NewProduct)
+	http.HandleFunc("/", controllers.Index)
+	http.HandleFunc("/new", controllers.New)
 	http.HandleFunc("/insert", controllers.Insert)
 }
