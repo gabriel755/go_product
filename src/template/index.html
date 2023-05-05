@@ -1,0 +1,24 @@
+{{define "Index"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {{range .}}
+    <tr>
+        <td>{{.Nome}}</td>
+        <td>{{.Descricao}}</td>
+        <td>{{.Preco}}</td>
+        <td>{{.Quantidade}}</td>
+    </tr>
+    {{end}}
+    <div class="footer">
+        <a href="/new" class="btn btn-primary mb-2">Novo Produto</a>
+    </div>
+</body>
+</html>
+{{end}}

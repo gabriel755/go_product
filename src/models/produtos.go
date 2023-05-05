@@ -1,0 +1,53 @@
+package models
+
+type Produto struct {
+	id         int
+	Nome       string
+	Descricao  string
+	Preco      float64
+	Quantidade int
+}
+
+func BuscaProdutos() []Produto {
+	db := ConncetionDb()
+
+	selectDeTodosOsProdutos, err := db.Query("select * from produtos;")
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	p := Produto{}
+	produtos := []Produto{}
+
+	for selectDeTodosOsProdutos.Next() {
+		var id, quantidade int
+		var nome, descricao string
+		var preco float64
+
+		err = selectDeTodosOsProdutos.Scan(&id, &nome, &descricao, &preco, &quantidade)
+
+		if err != nil {
+			panic(err.Error())
+		}
+		p.Nome = nome
+		p.Descricao = descricao
+		p.Preco = preco
+		p.Quantidade = quantidade
+		produtos = append(produtos, p)
+	}
+	defer db.Close()
+	return produtos
+
+}
+
+func CreateNewProduct(nome, descricao string, preco float64, quantidade int) {
+	db := db.ConncetionDb()
+
+	insertDataInDb, err := db.Prepare("insert into produtos(nome, dedscricao, preco, quantidade) values($1, $2, $3, $4)")
+	if err != nil {
+		panic(err.Error())
+	}
+	insertDataInDb.Exec(nome, descricao, preco, quantidade)
+	defer db.Close()
+}
